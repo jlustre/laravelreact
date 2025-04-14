@@ -25,11 +25,21 @@ class UserFactory extends Factory
     {
         return [
             'name' => fake()->name(),
+            'username' => Str::limit(strtolower(fake()->unique()->word()), 30, ''),
+            'sponsor' => $this->getExistingUsername(),
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
         ];
+    }
+
+    /**
+ * Get an existing username from the users table or null if none exist.
+ */
+    protected function getExistingUsername(): ?string
+    {
+        return \App\Models\User::inRandomOrder()->value('username') ?? null;
     }
 
     /**
