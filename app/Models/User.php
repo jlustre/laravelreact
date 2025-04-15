@@ -52,7 +52,15 @@ class User extends Authenticatable implements MustVerifyEmail
     protected static function booted()
     {
         static::created(function (User $user) {
-            $user->profile()->create();
+          //assign default values to the profile
+            $user->profile()->create([
+                'stateprovince_id' => null,
+                'timezone_id' => null,
+                'rank_id' => 1,
+                'avatar' => 'default.png',
+                'bio' => '',
+                'is_online' => 0,
+            ]);
         });
     }
 
@@ -86,5 +94,19 @@ class User extends Authenticatable implements MustVerifyEmail
     public function profile()
     {
         return $this->hasOne(Profile::class);
+    }
+
+    public function stateprovince()
+    {
+        return $this->hasOne(StateProvince::class);
+    }
+
+    public function timezone()
+    {
+        return $this->hasOne(TimeZone::class);
+    }
+    public function rank()
+    {
+        return $this->hasOne(Rank::class);
     }
 }

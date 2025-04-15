@@ -27,8 +27,22 @@ class DatabaseSeeder extends Seeder
             'updated_at' => now(),
         ]);
 
-        User::factory(5)->create();
-        User::factory(10)->create();
-        User::factory(20)->create();
+        User::factory()->create([
+            'name' => 'Joey Lustre',
+            'username' => 'asbeesceo',
+            'sponsor' => 'superadmin',
+            'email' => 'asbeesceo@asbeez.com',
+            'password' => bcrypt('password'), // password
+            'email_verified_at' => now(),
+            'active_status' => 1,
+            'remember_token' => null,
+            'deleted_at' => null,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        // User::factory(5)->create();
+        // User::factory(10)->create();
+        // User::factory(20)->create();
     }
 }

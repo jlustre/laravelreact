@@ -33,6 +33,15 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
+        $user = Auth::user();
+        if ($user->profile) {
+            $user->profile->update([
+                'is_online' => 1,
+                'last_access' => now(),
+                'last_ip' => $request->ip(),
+            ]);
+        }
+
         return redirect()->intended(route('dashboard', absolute: false));
     }
 
@@ -41,7 +50,14 @@ class AuthenticatedSessionController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
-        Auth::guard('web')->logout();
+      $user = Auth::user();
+      if ($user && $user->profile) {
+          $user->profile->update([
+              'is_online' => 0,
+          ]);
+      }
+
+      Auth::guard('web')->logout();
 
         $request->session()->invalidate();
         $request->session()->regenerateToken();
