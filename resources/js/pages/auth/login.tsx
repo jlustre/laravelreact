@@ -9,6 +9,8 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import AuthLayout from '@/layouts/auth-layout';
+import { TooltipProvider } from '@radix-ui/react-tooltip';
+import Navbar from '../front/navbar';
 
 type LoginForm = {
     email: string;
@@ -39,76 +41,88 @@ export default function Login({ status, canResetPassword }: LoginProps) {
 
     return (
         <AuthLayout title="Log in to your account" description="Enter your email and password below to log in">
-            <Head title="Log in" />
-
-            <form className="flex flex-col gap-6" onSubmit={submit}>
-                <div className="grid gap-6">
-                    <div className="grid gap-2">
-                        <Label htmlFor="email">Email address</Label>
-                        <Input
-                            id="email"
-                            name="email"
-                            type="email"
-                            // required
-                            autoFocus
-                            tabIndex={ndx++}
-                            autoComplete="email"
-                            value={data.email}
-                            onChange={(e) => setData('email', e.target.value)}
-                            placeholder="email@example.com"
-                        />
-                        <InputError message={errors.email} />
-                    </div>
-
-                    <div className="grid gap-2">
-                        <div className="flex items-center">
-                            <Label htmlFor="password">Password</Label>
-                            {canResetPassword && (
-                                <TextLink href={route('password.request')} className="ml-auto text-sm" tabIndex={ndx++}>
-                                    Forgot password?
-                                </TextLink>
-                            )}
+            <TooltipProvider>
+                <Head title="Log in" />
+                <Navbar />
+                <form className="flex flex-col gap-6" onSubmit={submit}>
+                    <div className="grid gap-6">
+                        <div className="grid gap-2">
+                            <Label htmlFor="email">Email address</Label>
+                            <Input
+                                id="email"
+                                name="email"
+                                type="email"
+                                // required
+                                autoFocus
+                                tabIndex={ndx++}
+                                autoComplete="email"
+                                value={data.email}
+                                onChange={(e) => setData('email', e.target.value)}
+                                placeholder="email@example.com"
+                            />
+                            <InputError message={errors.email} />
                         </div>
-                        <Input
-                            id="password"
-                            name="password"
-                            type="password"
-                            // required
+
+                        <div className="grid gap-2">
+                            <div className="flex items-center">
+                                <Label htmlFor="password">Password</Label>
+                                {canResetPassword && (
+                                    <TextLink
+                                        href={route('password.request')}
+                                        className="text-custom-500 hover:text-custom-800 ml-auto text-sm"
+                                        tabIndex={ndx++}
+                                    >
+                                        Forgot password?
+                                    </TextLink>
+                                )}
+                            </div>
+                            <Input
+                                id="password"
+                                name="password"
+                                type="password"
+                                // required
+                                tabIndex={ndx++}
+                                autoComplete="current-password"
+                                value={data.password}
+                                onChange={(e) => setData('password', e.target.value)}
+                                placeholder="Password"
+                            />
+                            <InputError message={errors.password} />
+                        </div>
+
+                        <div className="flex items-center space-x-3">
+                            <Checkbox
+                                id="remember"
+                                name="remember"
+                                className="mr-2 h-4 w-4"
+                                checked={data.remember}
+                                onClick={() => setData('remember', !data.remember)}
+                                tabIndex={ndx++}
+                            />
+                            <Label htmlFor="remember">Remember me</Label>
+                        </div>
+
+                        <Button
+                            type="submit"
+                            className="btn bg-custom-500 border-custom-500 hover:bg-custom-600 hover:border-custom-600 focus:bg-custom-600 focus:border-custom-600 focus:ring-custom-100 active:bg-custom-600 active:border-custom-600 active:ring-custom-100 dark:ring-custom-400/20 w-full text-white hover:cursor-pointer hover:text-white focus:text-white focus:ring active:text-white active:ring"
                             tabIndex={ndx++}
-                            autoComplete="current-password"
-                            value={data.password}
-                            onChange={(e) => setData('password', e.target.value)}
-                            placeholder="Password"
-                        />
-                        <InputError message={errors.password} />
+                            disabled={processing}
+                        >
+                            {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
+                            Log in
+                        </Button>
                     </div>
 
-                    <div className="flex items-center space-x-3">
-                        <Checkbox
-                            id="remember"
-                            name="remember"
-                            checked={data.remember}
-                            onClick={() => setData('remember', !data.remember)}
-                            tabIndex={ndx++}
-                        />
-                        <Label htmlFor="remember">Remember me</Label>
+                    <div className="text-muted-foreground text-center text-sm">
+                        Don't have an account?{' '}
+                        <TextLink href={route('register')} className="text-custom-500 hover:text-custom-800" tabIndex={ndx++}>
+                            Sign up
+                        </TextLink>
                     </div>
+                </form>
 
-                    <Button type="submit" className="mt-4 w-full hover:cursor-pointer" tabIndex={ndx++} disabled={processing}>
-                        {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
-                        Log in
-                    </Button>
-                </div>
-
-                <div className="text-muted-foreground text-center text-sm">
-                    Don't have an account?{' '}
-                    <TextLink href={route('register')} tabIndex={ndx++}>
-                        Sign up
-                    </TextLink>
-                </div>
-            </form>
-
-            {status && <div className="mb-4 text-center text-sm font-medium text-green-600">{status}</div>}
+                {status && <div className="mb-4 text-center text-sm font-medium text-green-600">{status}</div>}
+            </TooltipProvider>
         </AuthLayout>
     );
 }

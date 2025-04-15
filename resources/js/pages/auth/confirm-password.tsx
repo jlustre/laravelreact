@@ -48,7 +48,10 @@ export default function ConfirmPassword() {
                     </div>
 
                     <div className="flex items-center">
-                        <Button className="w-full" disabled={processing}>
+                        <Button
+                            className="btn bg-custom-500 border-custom-500 hover:bg-custom-600 hover:border-custom-600 focus:bg-custom-600 focus:border-custom-600 focus:ring-custom-100 active:bg-custom-600 active:border-custom-600 active:ring-custom-100 dark:ring-custom-400/20 w-full text-white hover:cursor-pointer hover:text-white focus:text-white focus:ring active:text-white active:ring"
+                            disabled={processing}
+                        >
                             {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
                             Confirm password
                         </Button>

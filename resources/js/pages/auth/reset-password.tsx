@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import AuthLayout from '@/layouts/auth-layout';
+import Navbar from '../front/navbar';
 
 interface ResetPasswordProps {
     token: string;
@@ -38,7 +39,7 @@ export default function ResetPassword({ token, email }: ResetPasswordProps) {
     return (
         <AuthLayout title="Reset password" description="Please enter your new password below">
             <Head title="Reset password" />
-
+            <Navbar />
             <form onSubmit={submit}>
                 <div className="grid gap-6">
                     <div className="grid gap-2">
@@ -87,7 +88,11 @@ export default function ResetPassword({ token, email }: ResetPasswordProps) {
                         <InputError message={errors.password_confirmation} className="mt-2" />
                     </div>
 
-                    <Button type="submit" className="mt-4 w-full" disabled={processing}>
+                    <Button
+                        type="submit"
+                        className="btn bg-custom-500 border-custom-500 hover:bg-custom-600 hover:border-custom-600 focus:bg-custom-600 focus:border-custom-600 focus:ring-custom-100 active:bg-custom-600 active:border-custom-600 active:ring-custom-100 dark:ring-custom-400/20 w-full text-white hover:cursor-pointer hover:text-white focus:text-white focus:ring active:text-white active:ring"
+                        disabled={processing}
+                    >
                         {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
                         Reset password
                     </Button>
